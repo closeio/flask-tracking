@@ -27,6 +27,8 @@ class Tracking(Document):
 
     execution_time = DecimalField()
 
+    custom_data = DynamicField()
+
     meta = {
         'max_size': 100*1024*1024, # 100 MB
         'max_documents': 10**6, # 1 million

@@ -55,3 +55,16 @@ The following query shows all requests that were served between 23:40 and 23:45 
 from flask.ext.tracking.documents import Tracking
 Tracking.objects.filter(date_created__gte='2012-10-22 23:40:00', date_created__lte='2012-10-22 23:45:00') 
 ```
+
+## Storing custom data
+
+Sometimes it is useful to store custom data in the tracking table for a given request. To do that, simply assign your data to `request._tracking_data`. Example:
+
+```
+from flask import request
+def my_view():
+    request._tracking_data = {'action: 'view', 'my_stuff': [1, 2, 3]}
+    return render()
+```
+
+Custom data is stored in a `DynamicField` called `custom_data` and can therefore contain any information.

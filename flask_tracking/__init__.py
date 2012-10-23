@@ -78,6 +78,7 @@ class Tracking(object):
                 response_headers=response.header_list,
                 response_body=can_store_body and response.data[:self.max_body_length] or '',
                 execution_time=execution_time,
+                custom_data=getattr(request, '_tracking_data', None),
             ).save(cascade=False, safe=False)
 
         return response
