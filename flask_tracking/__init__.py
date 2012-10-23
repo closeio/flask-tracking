@@ -42,15 +42,23 @@ class Tracking(object):
                 break
 
         if can_process:
-            user = current_user._get_current_object()
-            if not isinstance(user, Document):
+            try:
+                user = current_user._get_current_object()
+                if not isinstance(user, Document):
+                    user = None
+            except AttributeError:
                 user = None
 
             now = datetime.datetime.utcnow()
 
             ua = request.user_agent
 
-            documents.Tracking.objects.create(
+            if getattr(request, '_start_time', None):
+                execution_time = time.time() - request._start_time
+            else:
+                execution_time = None
+
+            documents.Tracking(
                 date_created=now,
                 host=request.host,
                 path=request.path,
@@ -69,7 +77,7 @@ class Tracking(object):
                 status_code=response.status_code,
                 response_headers=response.header_list,
                 response_body=can_store_body and response.data[:self.max_body_length] or '',
-                execution_time=time.time() - request._start_time,
-            )
+                execution_time=execution_time,
+            ).save(cascade=False, safe=False)
 
         return response
