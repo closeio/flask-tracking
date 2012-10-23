@@ -5,10 +5,14 @@ flask-tracking is a tracking app for Flask that logs HTTP request and response i
 
 ## Installation
 
+In your main application file, install the tracking app as follows:
+
 ```
 from flask.ext.tracking import Tracking
 Tracking(app)
 ```
+
+Make sure to set up the tracking app as early as possible to ensure accurate logging of the response and execution time. If you're using [Flask-gzip](https://github.com/elasticsales/Flask-gzip), install the tracking middleware afterwards to avoid logging compressed responses. 
 
 From now on, all requests are stored in the tracking collection.
 
