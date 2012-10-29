@@ -72,7 +72,7 @@ class Tracking(object):
                         string=ua.string,
                         version=ua.version,
                     ),
-                request_body=can_store_body and request.environ['body_copy'][:self.max_body_length] or '',
+                request_body=can_store_body and request.environ.get('body_copy','')[:self.max_body_length] or '',
                 request_headers=request.headers.items(),
                 status_code=response.status_code,
                 response_headers=response.header_list,
