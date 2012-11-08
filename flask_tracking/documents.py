@@ -30,7 +30,7 @@ class Tracking(Document):
     custom_data = DynamicField()
 
     meta = {
-        'max_size': 100*1024*1024, # 100 MB
+        'max_size': 10*1024*1024*1024, # 10 GB
         'max_documents': 10**6, # 1 million
         'indexes': ['date_created'],
         'ordering': ['-date_created'],
