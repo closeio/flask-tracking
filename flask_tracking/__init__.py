@@ -22,6 +22,9 @@ class Tracking(object):
         self.max_body_length = app.config.get('TRACKING_MAX_BODY_LENGTH', 64*1024)
         self.exclude_paths = app.config.get('TRACKING_EXCLUDE', [])
         self.exclude_body_paths = app.config.get('TRACKING_EXCLUDE_BODY', [])
+        self.table_size = app.config.get('TRACKING_TABLE_SIZE', 100*1024*1024)
+
+        documents.Tracking._meta['max_size'] = self.table_size
 
     def track_before(self):
         request._start_time = time.time()
