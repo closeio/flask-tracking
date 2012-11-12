@@ -57,7 +57,7 @@ class Tracking(object):
             ua = request.user_agent
 
             if getattr(request, '_start_time', None):
-                execution_time = time.time() - request._start_time
+                execution_time = int((time.time() - request._start_time) * 1000)
             else:
                 execution_time = None
 

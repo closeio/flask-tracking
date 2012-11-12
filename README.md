@@ -46,7 +46,7 @@ The following query shows all requests that took longer than one second to execu
 
 ```
 from flask.ext.tracking.documents import Tracking
-Tracking.objects.filter(execution_time__gte='1.0')
+Tracking.objects.filter(execution_time__gte=1000)
 ```
 
 The following query shows all requests that were served between 23:40 and 23:45 UTC on October 22th, 2012:

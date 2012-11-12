@@ -25,7 +25,8 @@ class Tracking(Document):
     response_headers = ListField()
     response_body = BinaryField()
 
-    execution_time = DecimalField()
+    # Execution time in ms
+    execution_time = IntField()
 
     custom_data = DynamicField()
 
