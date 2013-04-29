@@ -35,3 +35,6 @@ class Tracking(Document):
         'indexes': ['date_created'],
         'ordering': ['-date_created'],
     }
+
+    def __unicode__(self):
+        return '%s %s %s %s (%s ms)' % (self.date_created, self.method, self.path, self.status_code, self.execution_time)
