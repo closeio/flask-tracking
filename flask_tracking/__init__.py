@@ -14,7 +14,7 @@ except ImportError:
     current_user = None
 
 class Tracking(object):
-    def __init__(self, app):
+    def __init__(self, app, user_repr=None):
         app.before_request(self.track_before)
         app.after_request(self.track_after)
         app.wsgi_app = WSGICopyBody(app.wsgi_app)
@@ -25,6 +25,8 @@ class Tracking(object):
         self.table_size = app.config.get('TRACKING_TABLE_SIZE', 100*1024*1024)
 
         documents.Tracking._meta['max_size'] = self.table_size
+        if user_repr:
+            documents.Tracking.user_repr = user_repr
 
     def track_before(self):
         request._start_time = time.time()
