@@ -37,4 +37,11 @@ class Tracking(Document):
     }
 
     def __unicode__(self):
-        return '%s %s %s %s (%s ms)' % (self.date_created, self.method, self.path, self.status_code, self.execution_time)
+        return '{id} {date} {method} {path}{query} {status} ({time} ms)'.format(
+            id=self.id,
+            date=self.date_created.strftime('%Y-%m-%d %H:%M:%S.%f'),
+            method=self.method,
+            path=self.path,
+            query=self.query_params and '?%s' % self.query_params or '',
+            status=self.status_code,
+            time=self.execution_time)
