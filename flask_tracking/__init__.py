@@ -80,7 +80,7 @@ class Tracking(object):
                 request_body=can_store_body and request.environ.get('body_copy','')[:self.max_body_length] or '',
                 request_headers=request.headers.items(),
                 status_code=response.status_code,
-                response_headers=response.header_list,
+                response_headers=response.headers.to_list(response.charset),
                 response_body=can_store_body and response.data[:self.max_body_length] or '',
                 execution_time=execution_time,
                 custom_data=getattr(request, '_tracking_data', None),
