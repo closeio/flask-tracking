@@ -1,4 +1,5 @@
 import mongoengine
+import pymongo
 import datetime
 import re
 import time
@@ -88,7 +89,7 @@ class Tracking(object):
             )
             try:
                 t.save(cascade=False, write_concern={'w': -1, 'fsync': False})
-            except mongoengine.connection.ConnectionError:
+            except (mongoengine.connection.ConnectionError, pymongo.errors.AutoReconnect):
                 pass
 
         return response
