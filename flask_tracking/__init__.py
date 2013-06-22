@@ -1,5 +1,3 @@
-import mongoengine
-import pymongo
 import datetime
 import re
 import time
@@ -65,7 +63,7 @@ class Tracking(object):
             else:
                 execution_time = None
 
-            t = documents.Tracking(
+            documents.Tracking(
                 date_created=now,
                 host=request.host,
                 path=request.path,
@@ -86,11 +84,7 @@ class Tracking(object):
                 response_body=can_store_body and response.data[:self.max_body_length] or '',
                 execution_time=execution_time,
                 custom_data=getattr(request, '_tracking_data', None),
-            )
-            try:
-                t.save(cascade=False, write_concern={'w': -1, 'fsync': False})
-            except (mongoengine.connection.ConnectionError, pymongo.errors.AutoReconnect):
-                pass
+            ).save(cascade=False, write_concern={'w': -1, 'fsync': False})
 
         return response
 
