@@ -33,7 +33,10 @@ class Tracking(Document):
 
     meta = {
         'max_documents': 10**6, # 1 million
-        'indexes': ['date_created'],
+        'indexes': [
+            'date_created',
+            ('status_code', '-date_created')
+        ],
         'ordering': ['-date_created'],
     }
 
