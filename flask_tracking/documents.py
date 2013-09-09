@@ -70,6 +70,9 @@ class Tracking(Document):
         ret += self.format_json(self.response_body.decode())
         return ret
 
+    def get_header(self, name, default=''):
+        return { h[0]: h[1] for h in self.request_headers }.get(name, default)
+
     @staticmethod
     def format_json(inpt):
         """Format a string as JSON if possible, otherwise return string"""
