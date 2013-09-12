@@ -73,6 +73,25 @@ class Tracking(Document):
     def get_header(self, name, default=''):
         return { h[0]: h[1] for h in self.request_headers }.get(name, default)
 
+    def replay(self):
+        from flask import current_app
+
+        client = current_app.test_client()
+
+        # Make sure we don't send invalid cookies.
+        client.cookie_jar.clear()
+
+        full_path = self.path + ('?'+self.query_params if self.query_params else '')
+
+        method_func = getattr(client, self.method.lower())
+
+        return method_func(
+            full_path,
+            headers=self.request_headers,
+            data=self.request_body,
+            content_type=dict(self.request_headers)['Content-Type']
+        )
+
     @staticmethod
     def format_json(inpt):
         """Format a string as JSON if possible, otherwise return string"""
@@ -84,5 +103,3 @@ class Tracking(Document):
     @staticmethod
     def format_headers(headers):
         return '\n'.join(['  %s: %s' % (h[0], h[1] if len(h[1]) < 100 else '%s...' % h[1][:100]) for h in headers])
-
-
