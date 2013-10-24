@@ -64,10 +64,10 @@ class Tracking(Document):
         ret = '%s %s%s%s\n' % (self.method, self.host, self.path, self.query_params and '?%s' % self.query_params or '')
         ret += 'REQUEST:\n'
         ret += self.format_headers(self.request_headers) + '\n'
-        ret += self.format_json(self.request_body.decode()) + '\n'
+        ret += self.format_body(self.request_body) + '\n'
         ret += '%s RESPONSE:\n' % self.status_code
         ret += self.format_headers(self.response_headers) + '\n'
-        ret += self.format_json(self.response_body.decode())
+        ret += self.format_body(self.response_body)
         return ret
 
     def get_header(self, name, default=''):
@@ -93,12 +93,12 @@ class Tracking(Document):
         )
 
     @staticmethod
-    def format_json(inpt):
-        """Format a string as JSON if possible, otherwise return string"""
+    def format_body(inpt):
+        """Format an HTTP body as JSON if possible, otherwise return string"""
         try:
-            return json.dumps(json.loads(inpt), indent=4)
+            return json.dumps(json.loads(inpt.decode('utf8')), indent=4)
         except ValueError:
-            return inpt
+            return repr(inpt)
 
     @staticmethod
     def format_headers(headers):
