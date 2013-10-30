@@ -2,6 +2,7 @@ import mongoengine
 import pymongo
 import datetime
 import re
+import socket
 import time
 
 from flask import request, current_app
@@ -20,6 +21,8 @@ class Tracking(object):
         app.before_request(self.track_before)
         app.after_request(self.track_after)
         app.wsgi_app = WSGICopyBody(app.wsgi_app)
+
+        self.hostname = socket.gethostname()
 
         self.max_body_length = app.config.get('TRACKING_MAX_BODY_LENGTH', 64*1024)
         self.exclude_paths = app.config.get('TRACKING_EXCLUDE', [])
@@ -86,6 +89,7 @@ class Tracking(object):
                 response_body=can_store_body and response.data[:self.max_body_length] or '',
                 execution_time=execution_time,
                 custom_data=getattr(request, '_tracking_data', None),
+                hostname=self.hostname,
             )
             try:
                 t.save(cascade=False, write_concern={'w': -1, 'fsync': False})

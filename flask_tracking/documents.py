@@ -29,6 +29,9 @@ class Tracking(Document):
     # Execution time in ms
     execution_time = IntField()
 
+    # System hostname
+    hostname = StringField()
+
     custom_data = DynamicField()
 
     meta = {
