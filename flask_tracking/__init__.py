@@ -5,7 +5,8 @@ import re
 import socket
 import time
 
-from flask import request, current_app
+from bson.errors import InvalidStringData
+from flask import request
 from flask.ext.tracking import documents
 from flask.ext.tracking.utils import WSGICopyBody
 
@@ -93,7 +94,7 @@ class Tracking(object):
             )
             try:
                 t.save(cascade=False, write_concern={'w': -1, 'fsync': False})
-            except (mongoengine.connection.ConnectionError, pymongo.errors.AutoReconnect):
+            except (mongoengine.connection.ConnectionError, pymongo.errors.AutoReconnect, InvalidStringData):  # InvalidStringData is raised when a BSON object can't be encoded
                 pass
 
         return response
