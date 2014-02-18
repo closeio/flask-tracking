@@ -28,6 +28,7 @@ class Tracking(object):
         self.max_body_length = app.config.get('TRACKING_MAX_BODY_LENGTH', 64*1024)
         self.exclude_paths = app.config.get('TRACKING_EXCLUDE', [])
         self.exclude_body_paths = app.config.get('TRACKING_EXCLUDE_BODY', [])
+        self.exclude_status_codes = app.config.get('TRACKING_EXCLUDE_STATUS_CODES', [])
         self.table_size = app.config.get('TRACKING_TABLE_SIZE', 100*1024*1024)
 
         documents.Tracking._meta['max_size'] = self.table_size
@@ -51,6 +52,9 @@ class Tracking(object):
             if re.match(path, request.path):
                 can_store_body = False
                 break
+
+        if response.status_code in self.exclude_status_codes:
+            can_process = False
 
         if can_process:
             try:
