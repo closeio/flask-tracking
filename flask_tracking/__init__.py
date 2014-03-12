@@ -29,6 +29,7 @@ class Tracking(object):
         self.exclude_paths = app.config.get('TRACKING_EXCLUDE', [])
         self.exclude_body_paths = app.config.get('TRACKING_EXCLUDE_BODY', [])
         self.exclude_status_codes = app.config.get('TRACKING_EXCLUDE_STATUS_CODES', [])
+        self.min_execution_time = app.config.get('TRACKING_MIN_EXECUTION_TIME', 0)
         self.table_size = app.config.get('TRACKING_TABLE_SIZE', 100*1024*1024)
 
         documents.Tracking._meta['max_size'] = self.table_size
@@ -53,7 +54,14 @@ class Tracking(object):
                 can_store_body = False
                 break
 
-        if response.status_code in self.exclude_status_codes:
+        if getattr(request, '_start_time', None):
+            execution_time = int((time.time() - request._start_time) * 1000)
+        else:
+            execution_time = None
+
+        # process the request if its status is not excluded or if its
+        # execution time was higher than the min threshold
+        if response.status_code in self.exclude_status_codes and (execution_time is None or execution_time < self.min_execution_time):
             can_process = False
 
         if can_process:
@@ -67,11 +75,6 @@ class Tracking(object):
             now = datetime.datetime.utcnow()
 
             ua = request.user_agent
-
-            if getattr(request, '_start_time', None):
-                execution_time = int((time.time() - request._start_time) * 1000)
-            else:
-                execution_time = None
 
             t = documents.Tracking(
                 date_created=now,
