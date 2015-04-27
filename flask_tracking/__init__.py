@@ -27,6 +27,7 @@ class Tracking(object):
 
         self.max_body_length = app.config.get('TRACKING_MAX_BODY_LENGTH', 64*1024)
         self.exclude_paths = app.config.get('TRACKING_EXCLUDE', [])
+        self.exclude_methods = app.config.get('TRACKING_EXCLUDE_METHODS', [])
         self.exclude_body_paths = app.config.get('TRACKING_EXCLUDE_BODY', [])
         self.exclude_status_codes = app.config.get('TRACKING_EXCLUDE_STATUS_CODES', [])
         self.min_execution_time = app.config.get('TRACKING_MIN_EXECUTION_TIME', 0)
@@ -41,6 +42,9 @@ class Tracking(object):
 
     def track_after(self, response):
         can_process = True
+
+        if request.method in self.exclude_methods:
+            can_process = False
 
         for path in self.exclude_paths:
             if re.match(path, request.path):
