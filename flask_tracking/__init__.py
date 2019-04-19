@@ -1,15 +1,14 @@
-import mongoengine
-import pymongo
 import datetime
 import re
 import socket
 import time
 
+import mongoengine
+import pymongo
 from bson.errors import InvalidStringData
 from flask import request
 from flask.ext.tracking import documents
 from flask.ext.tracking.utils import WSGICopyBody
-
 from mongoengine import Document
 
 try:
@@ -97,7 +96,7 @@ class Tracking(object):
                 request_body=can_store_body and request.environ.get('body_copy','')[:self.max_body_length] or '',
                 request_headers=request.headers.items(),
                 status_code=response.status_code,
-                response_headers=response.headers.to_list(response.charset),
+                response_headers=response.headers.to_wsgi_list(),
                 response_body=can_store_body and response.data[:self.max_body_length] or '',
                 execution_time=execution_time,
                 custom_data=getattr(request, '_tracking_data', None),
@@ -109,4 +108,3 @@ class Tracking(object):
                 pass
 
         return response
-
