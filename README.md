@@ -8,11 +8,11 @@ flask-tracking is a tracking app for Flask that logs HTTP request and response i
 In your main application file, install the tracking app as follows:
 
 ```
-from flask.ext.tracking import Tracking
+from flask_tracking import Tracking
 Tracking(app)
 ```
 
-Make sure to set up the tracking app as early as possible to ensure accurate logging of the response and execution time. If you're using [Flask-gzip](https://github.com/closeio/Flask-gzip), install the tracking middleware afterwards to avoid logging compressed responses. 
+Make sure to set up the tracking app as early as possible to ensure accurate logging of the response and execution time. If you're using [Flask-gzip](https://github.com/closeio/Flask-gzip), install the tracking middleware afterwards to avoid logging compressed responses.
 
 From now on, all requests are stored in the tracking collection.
 
@@ -45,15 +45,15 @@ TRACKING_EXCLUDE_BODY = [
 The following query shows all requests that took longer than one second to execute.
 
 ```
-from flask.ext.tracking.documents import Tracking
+from flask_tracking.documents import Tracking
 Tracking.objects.filter(execution_time__gte=1000)
 ```
 
 The following query shows all requests that were served between 23:40 and 23:45 UTC on October 22th, 2012:
 
 ```
-from flask.ext.tracking.documents import Tracking
-Tracking.objects.filter(date_created__gte='2012-10-22 23:40:00', date_created__lte='2012-10-22 23:45:00') 
+from flask_tracking.documents import Tracking
+Tracking.objects.filter(date_created__gte='2012-10-22 23:40:00', date_created__lte='2012-10-22 23:45:00')
 ```
 
 ## Storing custom data

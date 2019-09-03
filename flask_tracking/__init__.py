@@ -7,12 +7,12 @@ import mongoengine
 import pymongo
 from bson.errors import InvalidStringData
 from flask import request
-from flask.ext.tracking import documents
-from flask.ext.tracking.utils import WSGICopyBody
+from flask_tracking import documents
+from flask_tracking.utils import WSGICopyBody
 from mongoengine import Document
 
 try:
-    from flask.ext.login import current_user
+    from flask_login import current_user
 except ImportError:
     current_user = None
 
